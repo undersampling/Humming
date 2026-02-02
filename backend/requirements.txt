@@ -1,0 +1,33 @@
+# HumFind Backend - Python Requirements
+# =====================================
+# Install with: pip install -r requirements.txt
+#
+# PREREQUISITES:
+# 1. Python 3.10+ (tested on 3.12)
+# 2. FFmpeg must be installed on your system:
+#    - Windows: Download from https://ffmpeg.org/download.html
+#              Extract and add bin folder to PATH
+#    - Or use: winget install ffmpeg
+#    - Or use: choco install ffmpeg
+
+# Django Framework
+Django>=6.0
+djangorestframework>=3.15
+django-cors-headers>=4.0
+
+# Audio Processing (DSP)
+librosa>=0.10
+numpy>=2.0
+scipy>=1.14
+scikit-learn>=1.5
+soundfile>=0.12
+
+# AI Model (Basic Pitch)
+# IMPORTANT: onnxruntime is REQUIRED for basic-pitch on Python 3.12+
+# Do NOT install tensorflow - it causes compatibility issues
+basic-pitch>=0.4.0
+onnxruntime>=1.18
+mir-eval>=0.8
+pretty-midi>=0.2.9
+resampy>=0.4.0,<0.4.3
+mido>=1.1.16
