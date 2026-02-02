@@ -64,16 +64,31 @@ def extract_chroma_vector(y, sr):
 def get_audio_vector(path, sr=22050):
     """Get audio feature vector using DSP methods."""
     try:
+        print(f"  [DSP] Loading audio: {path}")
         y, sr = librosa.load(path, sr=sr, mono=True)
+        print(f"  [DSP] Loaded {len(y)} samples, sr={sr}, duration={len(y)/sr:.2f}s")
 
-        if np.max(np.abs(y)) < 1e-3:
+        if len(y) == 0:
+            print(f"  [DSP] ERROR: Empty audio file")
             return None
 
+        max_amp = np.max(np.abs(y))
+        print(f"  [DSP] Max amplitude: {max_amp:.6f}")
+        
+        if max_amp < 1e-3:
+            print(f"  [DSP] ERROR: Audio too quiet (max amp < 0.001)")
+            return None
+
+        print(f"  [DSP] Extracting pitch histogram...")
         pitch_hist = extract_pitch_histogram(y, sr)
         if pitch_hist is None:
+            print(f"  [DSP] ERROR: Could not extract pitch histogram")
             return None
+        print(f"  [DSP] Pitch histogram extracted successfully")
 
+        print(f"  [DSP] Extracting chroma vector...")
         chroma_vec = extract_chroma_vector(y, sr)
+        print(f"  [DSP] Chroma vector extracted successfully")
 
         # pitch has higher weight than chroma
         vec = np.concatenate([
@@ -83,9 +98,14 @@ def get_audio_vector(path, sr=22050):
 
         norm = np.linalg.norm(vec)
         if norm == 0:
+            print(f"  [DSP] WARNING: Zero norm vector")
             return vec.tolist()
+        
+        print(f"  [DSP] SUCCESS: Vector created with {len(vec)} dimensions")
         return (vec / norm).tolist()
 
     except Exception as e:
-        print(f"DSP Error processing {path}: {e}")
+        import traceback
+        print(f"  [DSP] EXCEPTION processing {path}:")
+        traceback.print_exc()
         return None
