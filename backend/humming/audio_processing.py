@@ -89,7 +89,7 @@ def load_song_database(dataset_dir, method='dsp'):
     # Get list of audio files
     try:
         files = [f for f in os.listdir(dataset_dir) 
-                 if f.lower().endswith(('.mp3', '.wav', '.flac'))]
+                 if f.lower().endswith(('.mp3', '.wav', '.flac','.mp4', '.m4a', '.ogg'))]
     except FileNotFoundError:
         print(f"Dataset folder not found: {dataset_dir}")
         return []

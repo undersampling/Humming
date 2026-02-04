@@ -135,7 +135,7 @@ export default function HummingSearch() {
 
   // File upload functions
   const handleFileSelect = (file) => {
-    if (file && (file.type.startsWith("audio/") || file.name.match(/\.(mp3|wav|webm|m4a|ogg|flac)$/i))) {
+    if (file && (file.type.startsWith("audio/") || file.name.match(/\.(mp3|wav|webm|m4a|ogg|flac|mp4)$/i))) {
       setUploadedFile(file);
     } else {
       alert("Please upload a valid audio file (MP3, WAV, WEBM, M4A, OGG, FLAC)");
@@ -320,7 +320,7 @@ export default function HummingSearch() {
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept="audio/*,.mp3,.wav,.webm,.m4a,.ogg,.flac"
+                  accept="audio/*,.mp3,.wav,.webm,.m4a,.ogg,.flac,.mp4"
                   onChange={(e) => handleFileSelect(e.target.files[0])}
                   style={{ display: "none" }}
                 />
