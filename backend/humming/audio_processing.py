@@ -20,6 +20,15 @@ from . import ai_processing
 # JSON cache file location (in backend folder)
 CACHE_FILE = Path(__file__).resolve().parent.parent / 'song_database.json'
 
+# In-memory cache for loaded song database (avoids reading JSON on every request)
+_memory_cache = {
+    'dsp': None,  # Cached DSP song database
+    'ai': None,   # Cached AI song database
+    'dsp_mtime': 0,  # Last check time for DSP
+    'ai_mtime': 0,   # Last check time for AI
+}
+
+
 
 # ============================================
 # SHARED UTILITIES
@@ -83,7 +92,18 @@ def get_file_info(filepath):
 
 
 def load_song_database(dataset_dir, method='dsp'):
-    """Load and vectorize all songs with JSON caching."""
+    """Load and vectorize all songs with JSON + in-memory caching."""
+    import time
+    global _memory_cache
+    
+    # Check in-memory cache first (valid for 5 seconds to handle rapid requests)
+    cache_key = f'{method}_mtime'
+    current_time = time.time()
+    if (_memory_cache.get(method) is not None and 
+        current_time - _memory_cache.get(cache_key, 0) < 5):
+        print(f"  [MEMORY CACHE] Returning {len(_memory_cache[method])} songs ({method.upper()})")
+        return _memory_cache[method]
+    
     db = load_json_database()
     
     # Get list of audio files
@@ -158,6 +178,10 @@ def load_song_database(dataset_dir, method='dsp'):
     # Save if we processed new files or cleaned up stale entries
     if needs_save:
         save_json_database(db)
+    
+    # Store in memory cache for fast subsequent lookups
+    _memory_cache[method] = song_db
+    _memory_cache[f'{method}_mtime'] = current_time
     
     print(f"  Database summary: {len(song_db)} songs loaded ({method.upper()})")
     return song_db
