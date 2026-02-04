@@ -97,20 +97,23 @@ def load_song_database(dataset_dir, method='dsp'):
     # Check which files need processing
     song_db = []
     needs_save = False
+    current_keys = set()  # Track current file keys for cleanup
     
     for filename in files:
         filepath = os.path.join(dataset_dir, filename)
         file_mtime = get_file_info(filepath)
         cache_key = f"{filename}_{method}"
+        current_keys.add(cache_key)  # Track this key
         
         # Check if file is already cached and not modified
+        # Use tolerance for mtime comparison to handle float precision issues from JSON
         cached_info = db.get('files', {}).get(cache_key)
-        if cached_info and cached_info.get('mtime') == file_mtime:
+        cached_mtime = cached_info.get('mtime', 0) if cached_info else 0
+        if cached_info and abs(cached_mtime - file_mtime) < 1:  # 1 second tolerance
             # Use cached vector
             song_db.append({
                 'filename': filename,
                 'title': cached_info['title'],
-                'artist': cached_info['artist'],
                 'vector': cached_info['vector']
             })
             print(f"  [CACHED] {filename}")
@@ -128,7 +131,6 @@ def load_song_database(dataset_dir, method='dsp'):
                 song_db.append({
                     'filename': filename,
                     'title': title,
-                    'artist': artist,
                     'vector': vec
                 })
                 
@@ -138,17 +140,26 @@ def load_song_database(dataset_dir, method='dsp'):
                 db['files'][cache_key] = {
                     'mtime': file_mtime,
                     'title': title,
-                    'artist': artist,
                     'vector': vec
                 }
                 needs_save = True
             else:
                 print(f"  [SKIPPED] {filename} - no vector extracted")
     
-    # Save if we processed new files
+    # Clean up stale cache entries (files that no longer exist)
+    if 'files' in db:
+        stale_keys = [k for k in db['files'].keys() 
+                      if k.endswith(f"_{method}") and k not in current_keys]
+        for k in stale_keys:
+            print(f"  [CLEANUP] Removing stale cache entry: {k}")
+            del db['files'][k]
+            needs_save = True
+    
+    # Save if we processed new files or cleaned up stale entries
     if needs_save:
         save_json_database(db)
     
+    print(f"  Database summary: {len(song_db)} songs loaded ({method.upper()})")
     return song_db
 
 
@@ -182,7 +193,6 @@ def find_matches(hum_path, dataset_dir, top_n=5, method='dsp'):
         score = cosine_similarity(hum_vec, song['vector'])
         results.append({
             'title': song['title'],
-            'artist': song['artist'],
             'filename': song['filename'],
             'confidence': round(score, 4),
             'method': method.upper()
