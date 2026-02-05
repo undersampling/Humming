@@ -20,12 +20,13 @@ librosa>=0.10
 numpy>=2.0
 scipy>=1.14
 scikit-learn>=1.5
+scikit-learn>=1.5
 soundfile>=0.12
+matplotlib>=3.8.0
 
 # AI Model (Basic Pitch)
 # IMPORTANT: onnxruntime is REQUIRED for basic-pitch on Python 3.12+
 # Do NOT install tensorflow - it causes compatibility issues
-basic-pitch>=0.4.0
 onnxruntime>=1.18
 mir-eval>=0.8
 pretty-midi>=0.2.9

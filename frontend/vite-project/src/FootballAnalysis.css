@@ -1,0 +1,511 @@
+/* Football Analysis Page Styles */
+
+.football-container {
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Reuse wave background from main app */
+.football-container .wave-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  z-index: -1;
+}
+
+.football-container .wave-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(34, 197, 94, 0.1) 0%, transparent 70%);
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.football-container .main-content {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* Left Panel - Scrollable */
+.left-panel {
+  height: 100vh;
+  overflow-y: auto;
+  padding: 1.5rem;
+  background: rgba(30, 41, 59, 0.9);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Right Panel - Fixed Pitches */
+.right-panel {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.pitch-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #64748b;
+  text-align: center;
+}
+
+.pitch-placeholder span {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.pitch-placeholder p {
+  font-size: 1.1rem;
+  max-width: 300px;
+}
+
+.football-container .header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.football-container .header-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 50%, #14532d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.25rem;
+}
+
+.football-container .header-subtitle {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+/* Search Form */
+.search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-section-title {
+  color: #f1f5f9;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.goal-search .form-section-title {
+  color: #22c55e;
+}
+
+.form-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.form-group {
+  flex: 1;
+  min-width: 100px;
+}
+
+.form-group {
+  flex: 1;
+  min-width: 150px;
+}
+
+.form-group label {
+  display: block;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+.form-group input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.form-group select option {
+  background: #1e293b;
+  color: white;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.football-container .btn-primary {
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+  transition: all 0.3s ease;
+}
+
+.football-container .btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+}
+
+.football-container .btn-primary:disabled {
+  background: #4b5563;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.football-container .btn-secondary {
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.football-container .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.football-container .btn-goal {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+}
+
+.football-container .btn-goal:hover:not(:disabled) {
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+}
+
+.goal-card .play-index {
+  font-size: 0.85rem;
+}
+
+/* Error Message */
+.error-message {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  color: #fca5a5;
+  margin-bottom: 1.5rem;
+}
+
+.error-message .hint {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Results Section */
+.results-section {
+  margin-top: 2rem;
+}
+
+.section-title {
+  color: #f1f5f9;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+/* Play Card */
+.play-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+.play-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-2px);
+}
+
+.play-card.query {
+  border-color: rgba(34, 197, 94, 0.5);
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.play-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.play-index {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #a5b4fc;
+}
+
+.similarity-badge {
+  padding: 0.4rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.similarity-badge.high {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+}
+
+.similarity-badge.medium {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+}
+
+.similarity-badge.low {
+  background: rgba(100, 116, 139, 0.5);
+  color: #cbd5e1;
+}
+
+.query-badge {
+  padding: 0.4rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  color: white;
+}
+
+.play-card-body {
+  color: #e2e8f0;
+}
+
+.play-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.play-team {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.play-game {
+  font-size: 0.9rem;
+  color: #94a3b8;
+}
+
+.play-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin-bottom: 0.75rem;
+}
+
+.set-piece-type {
+  color: #a5b4fc;
+}
+
+.play-description {
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.8rem;
+  color: #64748b;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.75rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.similar-plays-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   Pitch Visualization Section
+   ============================================ */
+.pitch-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  max-height: 45vh;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.75rem;
+}
+
+.pitch-title {
+  color: #f1f5f9;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.pitch-info {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.8rem;
+}
+
+.pitch-info .team-name {
+  color: #a5b4fc;
+  font-weight: 600;
+}
+
+.pitch-info .play-events {
+  color: #94a3b8;
+}
+
+.pitch-canvas {
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  width: auto;
+  max-width: 100%;
+  max-height: calc(45vh - 80px);
+  object-fit: contain;
+}
+
+.trajectory-legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.legend-start {
+  color: #22c55e;
+}
+
+.legend-end {
+  color: #ef4444;
+}
+
+/* Clickable play cards */
+.play-card.clickable {
+  cursor: pointer;
+}
+
+.play-card.clickable:hover {
+  border-color: rgba(34, 197, 94, 0.4);
+  background: rgba(34, 197, 94, 0.05);
+}
+
+.play-card.selected {
+  border-color: rgba(34, 197, 94, 0.8);
+  background: rgba(34, 197, 94, 0.15);
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3);
+}
+
+.selected-badge {
+  padding: 0.4rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  margin-left: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .pitch-comparison {
+    grid-template-columns: 1fr;
+  }
+
+  .pitch-canvas {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .search-form {
+    flex-direction: column;
+  }
+
+  .form-group {
+    width: 100%;
+  }
+
+  .form-actions {
+    width: 100%;
+  }
+
+  .football-container .btn-primary,
+  .football-container .btn-secondary {
+    width: 100%;
+    text-align: center;
+  }
+}

@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
+import FootballAnalysis from "./FootballAnalysis";
 
-export default function HummingSearch() {
+function HummingSearch() {
   // Input state
   const [inputMode, setInputMode] = useState("record");
   const [isRecording, setIsRecording] = useState(false);
@@ -199,7 +200,7 @@ export default function HummingSearch() {
         console.log("Setting AI results:", data.ai.length, "items");
         setAiResults(data.ai);
       }
-      
+
       if ((!data.dsp || data.dsp.length === 0) && (!data.ai || data.ai.length === 0)) {
         alert("No results found. The recording may not contain detectable melody.");
       }
@@ -222,7 +223,7 @@ export default function HummingSearch() {
   // Result card component
   const ResultCard = ({ song, rank }) => {
     const confidenceClass = song.confidence >= 0.5 ? "high" : song.confidence >= 0.3 ? "medium" : "low";
-    
+
     return (
       <div className="result-card">
         <div className="result-card-left">
@@ -449,6 +450,42 @@ export default function HummingSearch() {
           </div>
         )}
       </main>
+    </div>
+  );
+}
+
+// Main App with Navigation
+export default function App() {
+  const [currentPage, setCurrentPage] = useState("humming");
+
+  return (
+    <div className="app-wrapper">
+      {/* Navigation Bar */}
+      <nav className="app-nav">
+        <div className="nav-container">
+          <div className="nav-logo">🎵 Music Lab</div>
+          <div className="nav-tabs">
+            <button
+              className={`nav-tab ${currentPage === "humming" ? "active" : ""}`}
+              onClick={() => setCurrentPage("humming")}
+            >
+              🎤 Humming Search
+            </button>
+            <button
+              className={`nav-tab ${currentPage === "football" ? "active" : ""}`}
+              onClick={() => setCurrentPage("football")}
+            >
+              ⚽ Football Analysis
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Page Content */}
+      <div className="page-content">
+        {currentPage === "humming" && <HummingSearch />}
+        {currentPage === "football" && <FootballAnalysis />}
+      </div>
     </div>
   );
 }

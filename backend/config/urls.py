@@ -4,4 +4,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('humming.urls')), # This makes the endpoint: http://localhost:8000/api/search/
+    path('api/football/', include('football.urls')), # Football analysis: http://localhost:8000/api/football/
 ]

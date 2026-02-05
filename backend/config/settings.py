@@ -21,6 +21,7 @@ INSTALLED_APPS = [
 
     # Your apps
     'humming',
+    'football',
 ]
 
 MIDDLEWARE = [
