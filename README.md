@@ -1,18 +1,29 @@
-# HumFind - Song Recognition by Humming
+# HumFind - Song Recognition & Football Analysis Platform
 
-A web application that identifies songs from humming using both DSP (Digital Signal Processing) and AI (Basic Pitch) methods.
+A web application featuring:
+1. **Song Recognition** - Identify songs from humming using DSP and AI methods
+2. **Football Analysis** - Find similar plays and goals using VAE-based embeddings
 
 ## 📁 Project Structure
 
 ```
 Humming/
-├── backend/          # Django REST API
-│   ├── humming/      # Main app (views, processing)
-│   ├── config/       # Django settings
+├── backend/              # Django REST API
+│   ├── humming/          # Song recognition app
+│   ├── football/         # Football analysis app
+│   │   ├── World_Cup/    # Match data & model outputs
+│   │   ├── services.py   # Similarity service
+│   │   ├── views.py      # API endpoints
+│   │   └── urls.py       # URL routing
+│   ├── config/           # Django settings
 │   └── requirements.txt
-├── frontend/         # React + Vite
+├── frontend/             # React + Vite
 │   └── vite-project/
-├── dataset/          # Audio files (MP3/WAV)
+│       └── src/
+│           ├── App.jsx              # Main app with navigation
+│           ├── FootballAnalysis.jsx # Football page
+│           └── FootballAnalysis.css
+├── dataset/              # Audio files (MP3/WAV)
 └── README.md
 ```
 
@@ -90,7 +101,9 @@ npm run dev
 | Django | Web framework |
 | librosa | Audio processing (DSP) |
 | basic-pitch | AI melody detection |
-| onnxruntime | AI model runtime (required!) |
+| onnxruntime | AI model runtime |
+| scikit-learn | Cosine similarity |
+| numpy | Numerical operations |
 
 ### Frontend (Node.js)
 | Package | Purpose |
@@ -98,11 +111,23 @@ npm run dev
 | React 19 | UI framework |
 | Vite 7 | Build tool |
 
-## 🎵 How It Works
+---
+
+## 🎵 Humming Search Feature
 
 1. **Record** your humming or **upload** an audio file
 2. Choose **DSP** (signal processing) or **AI** (neural network) method
 3. Get matched songs ranked by confidence score
+
+### Screenshots
+
+#### Recording Function
+<!-- TODO: Add screenshot of recording interface with microphone button -->
+![Recording Function](screenshots/humming_record.png)
+
+#### Upload Function
+<!-- TODO: Add screenshot of file upload/drag-drop interface -->
+![Upload Function](screenshots/humming_upload.png)
 
 ### DSP Method
 - Extracts pitch histogram and chroma features
@@ -111,6 +136,52 @@ npm run dev
 ### AI Method  
 - Uses Basic Pitch neural network for note detection
 - More accurate for complex melodies
+
+---
+
+## ⚽ Football Analysis Feature
+
+Analyze FIFA World Cup 2022 plays using VAE (Variational Autoencoder) embeddings to find similar possession sequences.
+
+### Features
+
+| Feature | Description |
+|---------|-------------|
+| **Play Similarity Search** | Enter a play index to find similar plays across all matches |
+| **Goal Similarity Search** | Select a country and goal to find similar goal-scoring plays |
+| **Trajectory Visualization** | Interactive pitch visualization showing ball movement |
+
+### How It Works
+
+1. **16,475 plays** extracted from 64 World Cup matches
+2. **119 features** extracted per play (spatial, temporal, events)
+3. **VAE model** compresses features to 32-dimensional embeddings
+4. **Cosine similarity** finds the most similar plays
+
+### Screenshots
+
+#### Play Similarity Search
+<!-- TODO: Add screenshot of play search form and results -->
+![Play Similarity Search](screenshots/play_similarity_search.png)
+
+#### Goal Similarity Search
+<!-- TODO: Add screenshot of goal search with country/goal dropdowns -->
+![Goal Similarity Search](screenshots/goal_similarity_search.png)
+
+#### Trajectory Visualization
+<!-- TODO: Add screenshot showing pitch with ball trajectory -->
+![Trajectory Visualization](screenshots/trajectory_visualization.png)
+
+### API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/football/analyze/` | POST | Find similar plays by index |
+| `/api/football/goals/countries/` | GET | List countries with goals |
+| `/api/football/goals/country/{name}/` | GET | Get goals by country |
+| `/api/football/goals/similar/` | POST | Find similar goals |
+
+---
 
 ## ⚠️ Troubleshooting
 
@@ -125,3 +196,8 @@ Install FFmpeg (see Prerequisites above)
 ### Python 3.12+ compatibility
 - Do NOT install tensorflow
 - Use onnxruntime instead (already in requirements.txt)
+
+### Football data not loading
+Ensure the following files exist in `backend/football/World_Cup/Model Outputs/`:
+- `all_plays.pkl` - Pickled play objects
+- `latent_representations.npy` - VAE embeddings
